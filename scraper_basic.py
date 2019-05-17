@@ -3,9 +3,10 @@ import sys, os, re, random, pickle
 from bs4 import BeautifulSoup as soup
 from selenium import webdriver
 from time import sleep
-import parameters
-#import requests
 from parsel import Selector
+
+import parameters
+import utils
 
 # function to ensure all key data fields have a value
 def validate_field(field):# if field is present pass if field:pass
@@ -15,41 +16,15 @@ def validate_field(field):# if field is present pass if field:pass
         return 'NR'
 
 def execute(urls):
+    HOLDER = {}
+
     # Configuring Firefox driver (geckodriver)
     cwl = os.getcwd()
     driverpath = str(os.path.join(cwl, 'geckodriver'))
-    cap = {}
-    cap["marionette"] = True
+    cap = {"marionette": True}
 
-    HOLDER = {}
-
-    # Default login parameters
-    login_uname = 'sumanthvasishta@gmail.com'
-    login_passwd = 'Asafoetida%73'
-
-    # specifies the path to the chromedriver.exe
-    driver = webdriver.Firefox(capabilities = cap, executable_path=driverpath)
-
-    # driver.get method() will navigate to a page given by the URL address
-    driver.get('https://www.linkedin.com/uas/login')
-
-    # locate email form by_class_name
-    username = driver.find_element_by_id('username').send_keys(login_uname)
-
-    # sleep for 0.5 seconds
-    sleep(0.5)
-
-    # locate password form by_class_name
-    password = driver.find_element_by_id('password').send_keys(login_passwd)
-
-    sleep(0.5)
-
-    # locate submit button by_xpath
-    sign_in_button = driver.find_element_by_xpath('//*[@type="submit"]')
-
-    # .click() to mimic button click
-    sign_in_button.click()
-
+    driver = utils.login_into_linkedIn(driverpath, cap)
+    
     #Parsing links after logging in Linked-In
     for url in urls:
         HOLDER[url] = {'Name': None, 'Job Title': None, 'Company': None, 'College': None, 'Location': None, 'N_Connections': None}
@@ -133,7 +108,7 @@ def execute(urls):
         print('Location: ', location)
         HOLDER[url]['Location'] = location
         print('Connections: ', connections)
-        HOLDER[url]['Connections'] = connections
+        HOLDER[url]['N_Connections'] = connections
         print('URL: ', url)
         print('\n')
 
