@@ -50,23 +50,11 @@ def executeSCAP(urls):
 
         #strg.append(str(p_url)+' Extracting basic details.\n')
         #Executing basic scrape
-        try:
-        #if True:
-            H = sb.execute(parsed_url)
-        except:
-            #strg.append(str(p_url)+' could not be parsed.\n')
-            H = ['NA1']
-            pass
-
+        H = sb.execute(parsed_url)
         #strg.append(str(p_url)+' Extracting Interests & connections.\n')
         #Executing interests scrape
-        try:
-            I = sc.execute(parsed_url)
-        except:
-            #strg.append(str(p_url)+' could not be parsed.\n')
-            I = ['NA2']
-            pass
-        
+        I = sc.execute(parsed_url)
+        #strg.append(str(p_url)+' could not be parsed.\n')
         try:
             for element in H.keys():
                 S[element] = (H[element], I[element])
@@ -75,8 +63,6 @@ def executeSCAP(urls):
             #strg.append(str(p_url)+' could not be appended to dump - incomplete data.\n')
             pass
 
-        H = {}
-        I = {}
         for s_url in scraped_url:
             print(str(len(scraped_url))+'/'+str(len(urls))+' exisitng URLs found in database')
             H[s_url] = S[s_url][0]
@@ -112,10 +98,13 @@ def executeCMapper(H, I):
             H_[element] = stencils.parse_basic_details(H[element])
             I_[element] = stencils.parse_interests_details(I[element])
         Mx, Dmx = stencils.generate_vo_matrix(H_, I_)
-    return Mx, Dmx
+    return H_, I_, Mx, Dmx
 
-def executeCVF(Mx, Dmx):
-    Clusters = cluster.identifyClusters(Mx, Dmx)
+def executeCVF(H_, I_, Mx, Dmx):
+    report = 'ON'
+    Clusters = cluster.identifyClusters(H_, I_, Mx, Dmx, report)
+    #Initializing vizualization
+    return Clusters
 
 if __name__=="__main__":
     pass

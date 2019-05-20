@@ -27,47 +27,48 @@ def execute(urls):
     driver = utils.login_into_linkedIn(driverpath, cap)
 
     for url in urls:
-        HOLDER[url] = []
-        #driver = webdriver.Firefox(capabilities = cap, executable_path=driverpath)
-        driver.get(url)
-        driver.execute_script("window.scrollTo(0, 200)")
-        sleep(1)
-        driver.execute_script("window.scrollTo(0, 400)")
-        sleep(1)
-        driver.execute_script("window.scrollTo(0, 600)")
-        sleep(1)
-        driver.execute_script("window.scrollTo(0, 1000)")
-        sleep(1)
-        driver.execute_script("window.scrollTo(0, 3000)")
-        sleep(1)
-        driver.execute_script("window.scrollTo(0, 5000)")
-        sleep(1)
-        driver.execute_script("window.scrollTo(0, 7000)")
-        # add a 5 second pause loading each URL
-        sleep(2 + random.randint(0, 2))
-        html = unicode(driver.page_source.encode("utf-8"), "utf-8")
-        data = soup(html, 'html.parser')
-        m = data.findAll("p", {"class", "pv-entity__dates t-14 t-black--light t-normal"})
         try:
-            dates = []
-            for elem in m[0].findAll("time"):
-                dates.append(int(elem.get_text()))
-            #Assuming an average individual graduates by the age of 22
-            print dates
-            age = (curr_year - dates[-1]) + 22
-        except:
-            age = 'NA'
-        d = data.findAll("span", {"class", "pv-entity__summary-title-text"})
-        for elem in d:
+            HOLDER[url] = []
+            #driver = webdriver.Firefox(capabilities = cap, executable_path=driverpath)
+            driver.get(url)
+            driver.execute_script("window.scrollTo(0, 200)")
+            sleep(1)
+            driver.execute_script("window.scrollTo(0, 400)")
+            sleep(1)
+            driver.execute_script("window.scrollTo(0, 600)")
+            sleep(1)
+            driver.execute_script("window.scrollTo(0, 1000)")
+            sleep(1)
+            driver.execute_script("window.scrollTo(0, 3000)")
+            sleep(1)
+            driver.execute_script("window.scrollTo(0, 5000)")
+            sleep(1)
+            driver.execute_script("window.scrollTo(0, 7000)")
+            # add a 5 second pause loading each URL
+            sleep(2 + random.randint(0, 2))
+            html = unicode(driver.page_source.encode("utf-8"), "utf-8")
+            data = soup(html, 'html.parser')
+            m = data.findAll("p", {"class", "pv-entity__dates t-14 t-black--light t-normal"})
             try:
-                HOLDER[url].append(elem.get_text())
+                dates = []
+                for elem in m[0].findAll("time"):
+                    dates.append(int(elem.get_text()))
+                #Assuming an average individual graduates by the age of 22
+                age = (curr_year - dates[-1]) + 22
             except:
-                pass
-        HOLDER[url].append(('age', age))
-        # add a 5 second pause loading each URL
-        sleep(5 + random.randint(1, 3))
+                age = 'NA'
+            d = data.findAll("span", {"class", "pv-entity__summary-title-text"})
+            for elem in d:
+                try:
+                    HOLDER[url].append(elem.get_text())
+                except:
+                    pass
+            HOLDER[url].append(('age', age))
+            # add a 5 second pause loading each URL
+            sleep(5 + random.randint(1, 3))
+        except:
+            print('Skipping '+str(url))
 
-        print age
         print HOLDER
 
     driver.quit()

@@ -14,7 +14,7 @@ def kickstart_driver(driverpath, cap):
         try:
             print('trying to kickstart driver functions... TRIAL: '+str(i)) 
             driver = webdriver.Firefox(capabilities = cap, executable_path=driverpath)
-            driver.get('https://www.whatismyip.com/')
+            driver.get('https://ipecho.net/')
             sleep(1)
             signal = 1
             driver.quit()
@@ -23,6 +23,17 @@ def kickstart_driver(driverpath, cap):
             i += 1
             pass
     return signal
+
+def loadUrl(driverpath, cap, url):
+    #try:
+    if True:
+        print('Loading url: '+str(url))
+        driver = webdriver.Firefox(capabilities = cap, executable_path=driverpath)
+        driver.get(url)
+        sleep(1)
+    #except:
+    #    print('Could not load url: '+str(url))
+    return driver
         
 
 def login_into_linkedIn(driverpath, cap):
