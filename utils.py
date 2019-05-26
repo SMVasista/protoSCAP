@@ -25,14 +25,14 @@ def kickstart_driver(driverpath, cap):
     return signal
 
 def loadUrl(driverpath, cap, url):
-    #try:
-    if True:
+    try:
+    #if True:
         print('Loading url: '+str(url))
         driver = webdriver.Firefox(capabilities = cap, executable_path=driverpath)
         driver.get(url)
         sleep(1)
-    #except:
-    #    print('Could not load url: '+str(url))
+    except:
+        print('Could not load url: '+str(url))
     return driver
         
 
